@@ -63,9 +63,8 @@ def check_winner():
             winnerTxt = combo[0]['text']
             winner = True
             messagebox.showinfo("Game Over", f"{winnerTxt} wins the game")
+            reset()
 
-if count == 9 and winner == False:
-    messagebox.showwarning("No one winns :(")
 
 
 # button clicked function
@@ -84,6 +83,11 @@ def  b_click(b):
         check_winner()
     else:
         messagebox.showerror("ERROR", "Hey! thats not how you play")
+
+
+    if count == 9 and winner == False:
+        messagebox.showwarning("Game over","No one wins :(")
+        reset()
 
 #creat menue
 my_menu = Menu(root)
