@@ -38,6 +38,9 @@ def reset():
 
 #check to see if someone won
 
+
+
+
 def check_winner():
     global b1, b2, b3, b4, b5, b6, b7, b8, b9
     winning_combinations = [
@@ -60,6 +63,9 @@ def check_winner():
             winnerTxt = combo[0]['text']
             winner = True
             messagebox.showinfo("Game Over", f"{winnerTxt} wins the game")
+
+if count == 9 and winner == False:
+    messagebox.showwarning("No one winns :(")
 
 
 # button clicked function
