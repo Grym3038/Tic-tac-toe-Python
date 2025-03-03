@@ -132,12 +132,12 @@ AiSettings.add_command(label="Easy", command=SetModeEasy)
 
 
 def gameloop():
-    global clicked, count, AiSet, GameMode, Available_Positions
+    global clicked, count, AiSet, GameMode, Available_Positions, winner
     global b1, b2, b3, b4, b5, b6, b7, b8, b9
     all_pos = [b1, b2, b3, b4, b5, b6, b7, b8, b9]
     
-    if AiSet == True and clicked == True and GameMode == 1:
-        r = random.randint(0, 9)
+    if AiSet == True and clicked == True and GameMode == 1 and winner == False:
+        r = random.randint(0, len(Available_Positions))
         for i in all_pos:
                 i.config(state=DISABLED)
         b_click(Available_Positions[r])
