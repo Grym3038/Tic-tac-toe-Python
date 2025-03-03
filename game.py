@@ -10,11 +10,12 @@ root.title('Tic-Tac-Toe Game')
 # Reset the game
 def reset():
     global b1, b2, b3, b4, b5, b6, b7, b8, b9
-    global clicked, count, AiSet, GameMode, Available_Positions
+    global clicked, count, AiSet, GameMode, Available_Positions, winner
     clicked = True
     count = 0
     AiSet = False
     GameMode = 0
+    winner = False
     
     b1 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b1))
     b2 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b2))
