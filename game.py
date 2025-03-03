@@ -10,10 +10,12 @@ root.title('Tic-Tac-Toe Game')
 # Reset the game
 def reset():
     global b1, b2, b3, b4, b5, b6, b7, b8, b9
-    global clicked, count, AiSet
+    global clicked, count, AiSet, GameMode, Available_Positions
     clicked = True
     count = 0
     AiSet = False
+    GameMode = 0
+    
     b1 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b1))
     b2 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b2))
     b3 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b3))
@@ -25,6 +27,7 @@ def reset():
     b7 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b7))
     b8 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b8))
     b9 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b9))
+    Available_Positions = [b1, b2, b3, b4, b5, b6, b7, b8, b9]
 
     b1.grid(row=0, column=0)
     b2.grid(row=0, column=1)
@@ -71,18 +74,26 @@ def check_winner():
 
 # button clicked function
 def  b_click(b):
-    global clicked, count, AiSet
+    global clicked, count, AiSet, Available_Positions, winner
 
-    if b["text"] == " " and clicked == True and AiSet == False:
+    if b["text"] == " " and clicked == True:
         b["text"] = "X"
         clicked = False
         count += 1
+        Available_Positions.remove(b)
         check_winner()
-    elif b["text"] == " " and clicked == False and AiSet == False:
+        if winner == False:
+            gameloop()
+        
+    elif b["text"] == " " and clicked == False:
         b["text"] = "O"
         clicked = True
         count += 1
+        Available_Positions.remove(b)
         check_winner()
+        if winner == False:
+            gameloop()
+
     else:
         messagebox.showerror("ERROR", "Hey! thats not how you play")
 
@@ -94,11 +105,12 @@ def  b_click(b):
 def SetAi():
     global AiSet
     AiSet = True
-
+    gameloop()
 
 def SetModeEasy():
     global GameMode
     GameMode = 1
+    gameloop()
 
 #creat menue
 my_menu = Menu(root)
@@ -120,22 +132,25 @@ AiSettings.add_command(label="Easy", command=SetModeEasy)
 
 
 def gameloop():
-    global clicked, count, AiSet, GameMode
+    global clicked, count, AiSet, GameMode, Available_Positions
     global b1, b2, b3, b4, b5, b6, b7, b8, b9
-    Available_Positions = [b1, b2, b3, b4, b5, b6, b7, b8, b9]
+    all_pos = [b1, b2, b3, b4, b5, b6, b7, b8, b9]
     
     if AiSet == True and clicked == True and GameMode == 1:
         r = random.randint(0, 9)
-        Available_Positions[r]["text"] = "X"
-        root.gameloop()
+        for i in all_pos:
+                i.config(state=DISABLED)
+        b_click(Available_Positions[r])
     else:
-        root.gameloop()
+        for i in all_pos:
+                i.config(state=NORMAL)
+        root.after(1200, gameloop)
     
 
 
 
 reset()
-root.gameloop()
+gameloop()
 
 
 root.mainloop()
