@@ -12,10 +12,11 @@ SFrame.pack(fill="x", pady=10)
 SFrame.columnconfigure(0, weight=1)
 SFrame.columnconfigure(1, weight=1)
 
-p1_label = Label(SFrame, text="X: 0", font="Arial")
+global p1_label, p2_label
+p1_label = Label(SFrame, text="X: 0", font=("Helvetica", 16) )
 p1_label.grid(row=0, column=0, sticky="w", padx=40)
 
-p2_label = Label(SFrame, text="O: 0", font="Arial")
+p2_label = Label(SFrame, text="O: 0", font=("Helvetica", 16))
 p2_label.grid(row=0, column=1, sticky="e", padx=40)
 
 
@@ -86,6 +87,7 @@ def reset():
 
 def check_winner():
     global b1, b2, b3, b4, b5, b6, b7, b8, b9
+    global p1_label, p2_label, P1_Score, P2_Score
     winning_combinations = [
     (b1, b2, b3),  # Top row
     (b4, b5, b6),  # Middle row
@@ -104,9 +106,15 @@ def check_winner():
             combo[1].config(bg="red")
             combo[2].config(bg="red")
             winnerTxt = combo[0]['text']
+            if winnerTxt == "X":
+                P1_Score += 1
+                p1_label.config(text="X: " + str(P1_Score))
+            else:
+                P2_Score += 1
+                p2_label.config(text="O: " + str(P2_Score))
             winner = True
             messagebox.showinfo("Game Over", f"{winnerTxt} wins the game")
-            reset()
+            Start()
 
 
 
