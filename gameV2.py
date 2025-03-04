@@ -4,8 +4,27 @@ import random
 
 root = Tk()
 root.title('Tic-Tac-Toe Game')
-BFrame = Frame(root, padx=40, pady=20)
 
+
+SFrame = Frame(root)
+SFrame.pack(pady=10)
+SFrame.columnconfigure(0, weight=1)
+
+p1sl = Label(SFrame, text="X: ", font="Arial")
+p1sl.grid(row=0, column=0, sticky=W+E)
+p1s = Label(SFrame, text="", font="Arial")
+p1s.grid(row=0, column=0, sticky=W+E)
+
+p2sl = Label(SFrame, text="O: ", font="Arial")
+p2sl.grid(row=1, column=0, sticky=W+E)
+p2s = Label(SFrame, text="", font="Arial")
+p2s.grid(row=1, column=0, sticky=W+E)
+
+BFrame = Frame(root)
+BFrame.pack(padx=40, pady=20)
+BFrame.columnconfigure(0, weight=1)
+BFrame.columnconfigure(1, weight=1)
+BFrame.columnconfigure(2, weight=1)
 
 
 # root.iconbitmap
@@ -27,22 +46,20 @@ def Start():
     clicked = True
     count = 0
     winner = False
-    Available_Positions = [b1, b2, b3, b4, b5, b6, b7, b8, b9]   
-
-
     
-    b1 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b1))
-    b2 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b2))
-    b3 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b3))
+    b1 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b1))
+    b2 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b2))
+    b3 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b3))
 
-    b4 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b4))
-    b5 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b5))
-    b6 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b6))
+    b4 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b4))
+    b5 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b5))
+    b6 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b6))
 
-    b7 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b7))
-    b8 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b8))
-    b9 = Button(root, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b9))
+    b7 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b7))
+    b8 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b8))
+    b9 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b9))
 
+    Available_Positions = [b1, b2, b3, b4, b5, b6, b7, b8, b9]   
 
     b1.grid(row=0, column=0)
     b2.grid(row=0, column=1)
@@ -175,7 +192,7 @@ def gameloop():
 
 
 
-reset()
+Start()
 gameloop()
 
 
