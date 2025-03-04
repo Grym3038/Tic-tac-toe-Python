@@ -77,11 +77,15 @@ def Start():
 #resets all values
 def reset():
     Start()
-    global AiSet, P1_Score, P2_Score, GameMode
+    global AiSet, P1_Score, P2_Score, GameMode, p1_label, p2_label
     AiSet = False
     P2_Score = 0
     P1_Score = 0
     GameMode = 0
+    p1_label.config(text="X: " + str(P1_Score))
+    p2_label.config(text="O: " + str(P1_Score))
+
+
 
 
 
@@ -149,7 +153,7 @@ def  b_click(b):
 
     if count == 9 and winner == False:
         messagebox.showwarning("Game over","No one wins :(")
-        reset()
+        Start()
 
 
 def SetAi():
