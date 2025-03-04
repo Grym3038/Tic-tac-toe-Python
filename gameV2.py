@@ -7,18 +7,17 @@ root.title('Tic-Tac-Toe Game')
 
 
 SFrame = Frame(root)
-SFrame.pack(pady=10)
+SFrame.pack(fill="x", pady=10)
+
 SFrame.columnconfigure(0, weight=1)
+SFrame.columnconfigure(1, weight=1)
 
-p1sl = Label(SFrame, text="X: ", font="Arial")
-p1sl.grid(row=0, column=0, sticky=W+E)
-p1s = Label(SFrame, text="", font="Arial")
-p1s.grid(row=0, column=0, sticky=W+E)
+p1_label = Label(SFrame, text="X: 0", font="Arial")
+p1_label.grid(row=0, column=0, sticky="w", padx=40)
 
-p2sl = Label(SFrame, text="O: ", font="Arial")
-p2sl.grid(row=1, column=0, sticky=W+E)
-p2s = Label(SFrame, text="", font="Arial")
-p2s.grid(row=1, column=0, sticky=W+E)
+p2_label = Label(SFrame, text="O: 0", font="Arial")
+p2_label.grid(row=0, column=1, sticky="e", padx=40)
+
 
 BFrame = Frame(root)
 BFrame.pack(padx=40, pady=20)
