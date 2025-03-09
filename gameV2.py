@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import random
-
+from varname import *
 from MiniMax import Minimax
 
 root = Tk()
@@ -29,6 +29,10 @@ BFrame.columnconfigure(1, weight=1)
 BFrame.columnconfigure(2, weight=1)
 
 
+global minimax
+minimax = Minimax()
+
+
 # root.iconbitmap
 
 # intialize global values
@@ -48,6 +52,7 @@ def Start():
     clicked = True
     count = 0
     winner = False
+
     
     b1 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b1))
     b2 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b2))
@@ -129,13 +134,14 @@ def check_winner():
 
 # button clicked function
 def  b_click(b):
-    global clicked, count, AiSet, Available_Positions, winner
-
+    global clicked, count, AiSet, Available_Positions, winner, minimax
     if b["text"] == " " and clicked == True:
         b["text"] = "X"
         clicked = False
         count += 1
         Available_Positions.remove(b)
+        varname = varname(b)
+        minimax.fillPos(varname,b["text"])
         check_winner()
         if winner == False:
             gameloop()
@@ -145,6 +151,7 @@ def  b_click(b):
         clicked = True
         count += 1
         Available_Positions.remove(b)
+        minimax.fillPos(varname(b),b["text"])        
         check_winner()
         if winner == False:
             gameloop()
@@ -188,7 +195,7 @@ AiSettings.add_command(label="Easy", command=SetModeEasy)
 
 
 def gameloop():
-    global clicked, count, AiSet, GameMode, Available_Positions, winner
+    global clicked, count, AiSet, GameMode, Available_Positions, winner, minimax
     global b1, b2, b3, b4, b5, b6, b7, b8, b9
     all_pos = [b1, b2, b3, b4, b5, b6, b7, b8, b9]
     
@@ -197,6 +204,10 @@ def gameloop():
         for i in all_pos:
                 i.config(state=DISABLED)
         b_click(Available_Positions[r])
+    if AiSet == True and clicked == True and GameMode == 2 and winner == False:
+        move = minimax.find_best_move()
+        if move != -1:
+            b_click(move)
     else:
         for i in all_pos:
                 i.config(state=NORMAL)
@@ -207,7 +218,6 @@ def gameloop():
 
 Start()
 gameloop()
-minimax = Minimax()
 
 
 
