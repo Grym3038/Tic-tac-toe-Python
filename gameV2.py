@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import messagebox
 import random
 
+from MiniMax import Minimax
+
 root = Tk()
 root.title('Tic-Tac-Toe Game')
 
@@ -205,6 +207,8 @@ def gameloop():
 
 Start()
 gameloop()
+minimax = Minimax()
+
 
 
 root.mainloop()
