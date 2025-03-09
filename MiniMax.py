@@ -1,6 +1,6 @@
 class Minimax:
     def __init__(self):
-        self.board = [["" for _ in range(9)]]
+        self.board = ["" for _ in range(9)]
         
     def fillPos(self, TakenPos, turn):
             match TakenPos:

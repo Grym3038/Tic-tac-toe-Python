@@ -135,7 +135,7 @@ def check_winner():
 # button clicked function
 def  b_click(b):
     global clicked, count, AiSet, Available_Positions, winner, minimax
-    if b["text"] == " " and clicked == True:
+    if b["text"] == "" and clicked == True:
         b["text"] = "X"
         clicked = False
         count += 1
@@ -146,7 +146,7 @@ def  b_click(b):
         if winner == False:
             gameloop()
         
-    elif b["text"] == " " and clicked == False:
+    elif b["text"] == "" and clicked == False:
         b["text"] = "O"
         clicked = True
         count += 1
@@ -175,6 +175,11 @@ def SetModeEasy():
     GameMode = 1
     gameloop()
 
+def SetModeImposible():
+    global GameMode
+    GameMode = 2
+    gameloop()
+
 #creat menue
 my_menu = Menu(root)
 root.config(menu=my_menu)
@@ -192,6 +197,7 @@ my_menu.add_cascade(label="Ai Settings", menu=AiMenu)
 AiMenu.add_command(label="Turn On Ai", command=SetAi)
 AiMenu.add_cascade(label="Ai Mode", menu=AiSettings)
 AiSettings.add_command(label="Easy", command=SetModeEasy)
+AiSettings.add_command(label="Impossible", command=SetModeImposible)
 
 
 def gameloop():
