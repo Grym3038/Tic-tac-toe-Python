@@ -1,169 +1,161 @@
 from tkinter import *
 from tkinter import messagebox
 import random
-from varname import *
 from MiniMax import Minimax
 
 root = Tk()
 root.title('Tic-Tac-Toe Game')
 
-
+# Score Frame
 SFrame = Frame(root)
 SFrame.pack(fill="x", pady=10)
-
 SFrame.columnconfigure(0, weight=1)
 SFrame.columnconfigure(1, weight=1)
 
-global p1_label, p2_label
-p1_label = Label(SFrame, text="X: 0", font=("Helvetica", 16) )
+p1_label = Label(SFrame, text="X: 0", font=("Helvetica", 16))
 p1_label.grid(row=0, column=0, sticky="w", padx=40)
-
 p2_label = Label(SFrame, text="O: 0", font=("Helvetica", 16))
 p2_label.grid(row=0, column=1, sticky="e", padx=40)
 
-
+# Board Frame
 BFrame = Frame(root)
 BFrame.pack(padx=40, pady=20)
-BFrame.columnconfigure(0, weight=1)
-BFrame.columnconfigure(1, weight=1)
-BFrame.columnconfigure(2, weight=1)
+for i in range(3):
+    BFrame.columnconfigure(i, weight=1)
 
-
-global minimax
 minimax = Minimax()
 
-
-# root.iconbitmap
-
-# intialize global values
-global b1, b2, b3, b4, b5, b6, b7, b8, b9
-global clicked, count, AiSet, GameMode, Available_Positions, winner, P1_Score, P2_Score
+# Global game state variables
+clicked = True        # True means it's human ("X") turn; False means AI ("O") turn.
+count = 0
 AiSet = False
-GameMode = 0
-P2_Score = 0
+GameMode = 0          # 1: Easy, 2: Impossible
 P1_Score = 0
+P2_Score = 0
+winner = False
+Available_Positions = []  # Will hold the Button objects
 
-#==============================================================================================================================================================
-# core game functions
-# Start the game
+# Dictionary to hold buttons by their name
+buttons = {}
+
 def Start():
-    global b1, b2, b3, b4, b5, b6, b7, b8, b9
-    global clicked, count, AiSet, GameMode, Available_Positions, winner
+    global clicked, count, winner, Available_Positions, buttons
+    # Reset GUI board and minimax board
     clicked = True
     count = 0
     winner = False
-
+    minimax.board = ["" for _ in range(9)]
     
-    b1 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b1))
-    b2 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b2))
-    b3 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b3))
+    # Create buttons and store with an identifier
+    buttons = {
+        "b1": Button(BFrame, text="", font=("Helvetica", 20), height=3, width=6,
+                     bg="SystemButtonFace", command=lambda: b_click(buttons["b1"], "b1")),
+        "b2": Button(BFrame, text="", font=("Helvetica", 20), height=3, width=6,
+                     bg="SystemButtonFace", command=lambda: b_click(buttons["b2"], "b2")),
+        "b3": Button(BFrame, text="", font=("Helvetica", 20), height=3, width=6,
+                     bg="SystemButtonFace", command=lambda: b_click(buttons["b3"], "b3")),
+        "b4": Button(BFrame, text="", font=("Helvetica", 20), height=3, width=6,
+                     bg="SystemButtonFace", command=lambda: b_click(buttons["b4"], "b4")),
+        "b5": Button(BFrame, text="", font=("Helvetica", 20), height=3, width=6,
+                     bg="SystemButtonFace", command=lambda: b_click(buttons["b5"], "b5")),
+        "b6": Button(BFrame, text="", font=("Helvetica", 20), height=3, width=6,
+                     bg="SystemButtonFace", command=lambda: b_click(buttons["b6"], "b6")),
+        "b7": Button(BFrame, text="", font=("Helvetica", 20), height=3, width=6,
+                     bg="SystemButtonFace", command=lambda: b_click(buttons["b7"], "b7")),
+        "b8": Button(BFrame, text="", font=("Helvetica", 20), height=3, width=6,
+                     bg="SystemButtonFace", command=lambda: b_click(buttons["b8"], "b8")),
+        "b9": Button(BFrame, text="", font=("Helvetica", 20), height=3, width=6,
+                     bg="SystemButtonFace", command=lambda: b_click(buttons["b9"], "b9"))
+    }
+    
+    # Reset the available positions list
+    Available_Positions.clear()
+    for key in buttons:
+        Available_Positions.append(buttons[key])
+    
+    # Place the buttons on the grid
+    buttons["b1"].grid(row=0, column=0)
+    buttons["b2"].grid(row=0, column=1)
+    buttons["b3"].grid(row=0, column=2)
+    buttons["b4"].grid(row=1, column=0)
+    buttons["b5"].grid(row=1, column=1)
+    buttons["b6"].grid(row=1, column=2)
+    buttons["b7"].grid(row=2, column=0)
+    buttons["b8"].grid(row=2, column=1)
+    buttons["b9"].grid(row=2, column=2)
 
-    b4 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b4))
-    b5 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b5))
-    b6 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b6))
-
-    b7 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b7))
-    b8 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b8))
-    b9 = Button(BFrame, text=" ", font=("Helvetica", 20), height=3, width=6, bg="SystemButtonFace", command=lambda: b_click(b9))
-
-    Available_Positions = [b1, b2, b3, b4, b5, b6, b7, b8, b9]   
-
-    b1.grid(row=0, column=0)
-    b2.grid(row=0, column=1)
-    b3.grid(row=0, column=2)
-
-    b4.grid(row=1, column=0)
-    b5.grid(row=1, column=1)
-    b6.grid(row=1, column=2)
-
-    b7.grid(row=2, column=0)
-    b8.grid(row=2, column=1)
-    b9.grid(row=2, column=2)
-
-
-#resets all values
 def reset():
+    global AiSet, P1_Score, P2_Score, GameMode
     Start()
-    global AiSet, P1_Score, P2_Score, GameMode, p1_label, p2_label
     AiSet = False
-    P2_Score = 0
     P1_Score = 0
+    P2_Score = 0
     GameMode = 0
     p1_label.config(text="X: " + str(P1_Score))
-    p2_label.config(text="O: " + str(P1_Score))
-
-
-
-
+    p2_label.config(text="O: " + str(P2_Score))
+    ai_on_var.set(False)
+    ai_mode_var.set("")
 
 def check_winner():
-    global b1, b2, b3, b4, b5, b6, b7, b8, b9
-    global p1_label, p2_label, P1_Score, P2_Score
+    global P1_Score, P2_Score, winner
+    # Use "" (empty string) for unclicked buttons instead of " "
     winning_combinations = [
-    (b1, b2, b3),  # Top row
-    (b4, b5, b6),  # Middle row
-    (b7, b8, b9),  # Bottom row
-    (b1, b4, b7),  # Left column
-    (b2, b5, b8),  # Middle column
-    (b3, b6, b9),  # Right column
-    (b1, b5, b9),  # Diagonal from top-left to bottom-right
-    (b3, b5, b7)   # Diagonal from top-right to bottom-left
+        (buttons["b1"], buttons["b2"], buttons["b3"]),
+        (buttons["b4"], buttons["b5"], buttons["b6"]),
+        (buttons["b7"], buttons["b8"], buttons["b9"]),
+        (buttons["b1"], buttons["b4"], buttons["b7"]),
+        (buttons["b2"], buttons["b5"], buttons["b8"]),
+        (buttons["b3"], buttons["b6"], buttons["b9"]),
+        (buttons["b1"], buttons["b5"], buttons["b9"]),
+        (buttons["b3"], buttons["b5"], buttons["b7"])
     ]
-    global winner
     winner = False
     for combo in winning_combinations:
-        if combo[0]['text'] == combo[1]['text'] == combo[2]['text'] != " ":
-            combo[0].config(bg="red")
-            combo[1].config(bg="red")
-            combo[2].config(bg="red")
+        # Check that the text is not empty
+        if combo[0]['text'] == combo[1]['text'] == combo[2]['text'] != "":
+            for btn in combo:
+                btn.config(bg="red")
             winnerTxt = combo[0]['text']
             if winnerTxt == "X":
+                global P1_Score
                 P1_Score += 1
                 p1_label.config(text="X: " + str(P1_Score))
             else:
+                global P2_Score
                 P2_Score += 1
                 p2_label.config(text="O: " + str(P2_Score))
             winner = True
             messagebox.showinfo("Game Over", f"{winnerTxt} wins the game")
             Start()
+            return  # Exit after a win
 
-
-
-
-
-
-# button clicked function
-def  b_click(b):
-    global clicked, count, AiSet, Available_Positions, winner, minimax
-    if b["text"] == "" and clicked == True:
-        b["text"] = "X"
-        clicked = False
-        count += 1
-        Available_Positions.remove(b)
-        varname = varname(b)
-        minimax.fillPos(varname,b["text"])
-        check_winner()
-        if winner == False:
-            gameloop()
-        
-    elif b["text"] == "" and clicked == False:
-        b["text"] = "O"
-        clicked = True
-        count += 1
-        Available_Positions.remove(b)
-        minimax.fillPos(varname(b),b["text"])        
-        check_winner()
-        if winner == False:
-            gameloop()
-
+def b_click(b, btn_name):
+    global clicked, count, Available_Positions, winner, minimax
+    if b["text"] == "":
+        # Human move (always "X")
+        if clicked:
+            b["text"] = "X"
+            clicked = False  # Now it will be AI's turn ("O")
+            count += 1
+            if b in Available_Positions:
+                Available_Positions.remove(b)
+            minimax.fillPos(btn_name, b["text"])
+            check_winner()
+        # AI move (plays as "O")
+        else:
+            b["text"] = "O"
+            clicked = True  # Switch back to human's turn
+            count += 1
+            if b in Available_Positions:
+                Available_Positions.remove(b)
+            minimax.fillPos(btn_name, b["text"])
+            check_winner()
     else:
-        messagebox.showerror("ERROR", "Hey! thats not how you play")
+        messagebox.showerror("ERROR", "That space is already taken!")
 
-
-    if count == 9 and winner == False:
-        messagebox.showwarning("Game over","No one wins :(")
+    if count == 9 and not winner:
+        messagebox.showwarning("Game Over", "No one wins :(")
         Start()
-
 
 def SetAi():
     global AiSet
@@ -180,54 +172,46 @@ def SetModeImposible():
     GameMode = 2
     gameloop()
 
-#creat menue
+def gameloop():
+    global clicked, Available_Positions, winner, minimax
+    all_buttons = list(buttons.values())
+    if AiSet and not clicked and not winner:
+        for btn in all_buttons:
+            btn.config(state=DISABLED)
+        if GameMode == 1:
+            if Available_Positions:
+                r = random.choice(Available_Positions)
+                for name, btn_obj in buttons.items():
+                    if btn_obj == r:
+                        ai_btn_name = name
+                        break
+                b_click(r, ai_btn_name)
+        elif GameMode == 2:
+            move = minimax.find_best_move()
+            if move[0] != -1:
+                ai_btn = buttons[move[1]]
+                b_click(ai_btn, move[1])
+        for btn in all_buttons:
+            btn.config(state=NORMAL)
+    root.after(300, gameloop)
+
 my_menu = Menu(root)
 root.config(menu=my_menu)
-
-# create options menu
 options_menu = Menu(my_menu, tearoff=False)
 my_menu.add_cascade(label="Options", menu=options_menu)
 options_menu.add_command(label="Reset Game", command=reset)
 
 AiMenu = Menu(my_menu, tearoff=False)
 AiSettings = Menu(AiMenu, tearoff=False)
+ai_on_var = BooleanVar(value=False)
+ai_mode_var = StringVar(value="")
 
 my_menu.add_cascade(label="Ai Settings", menu=AiMenu)
-
-AiMenu.add_command(label="Turn On Ai", command=SetAi)
+AiMenu.add_checkbutton(label="Turn On Ai", command=SetAi, variable=ai_on_var)
 AiMenu.add_cascade(label="Ai Mode", menu=AiSettings)
-AiSettings.add_command(label="Easy", command=SetModeEasy)
-AiSettings.add_command(label="Impossible", command=SetModeImposible)
-
-
-def gameloop():
-    global clicked, count, AiSet, GameMode, Available_Positions, winner, minimax
-    global b1, b2, b3, b4, b5, b6, b7, b8, b9
-    all_pos = [b1, b2, b3, b4, b5, b6, b7, b8, b9]
-    
-    if AiSet == True and clicked == True and GameMode == 1 and winner == False:
-        r = random.randint(0, len(Available_Positions))
-        for i in all_pos:
-                i.config(state=DISABLED)
-        b_click(Available_Positions[r])
-    if AiSet == True and clicked == True and GameMode == 2 and winner == False:
-        move = minimax.find_best_move()
-        if move != -1:
-            b_click(move)
-    else:
-        for i in all_pos:
-                i.config(state=NORMAL)
-        root.after(1200, gameloop)
-    
-
-
+AiSettings.add_radiobutton(label="Easy", command=SetModeEasy, variable=ai_mode_var, value="Easy")
+AiSettings.add_radiobutton(label="Impossible", command=SetModeImposible, variable=ai_mode_var, value="Impossible")
 
 Start()
 gameloop()
-
-
-
 root.mainloop()
-
-#==============================================================================================================================================================
-
